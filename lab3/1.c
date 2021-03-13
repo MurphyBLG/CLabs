@@ -16,7 +16,7 @@ void insertNew (int *arr, int *size, int *idx) {
     *idx += 1;
 }
 
-int main(){
+int main() {
     FILE *in, *out;
     in = fopen("INPUT.txt", "r");
 
