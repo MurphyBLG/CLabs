@@ -67,5 +67,10 @@ int main() {
 
     printInfo(arr, size, request);
     
+    for (int i = 0; i < size; i++) {
+        free(arr[i].word);
+        free(arr[i].translation);
+        free(arr[i].example);
+    }
     free(arr);
 }

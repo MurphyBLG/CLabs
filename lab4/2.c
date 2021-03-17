@@ -36,10 +36,9 @@ int main() {
 
         if (first == NULL) {
             first = malloc(sizeof(struct node));
-            last = first;
 
             first->prev = NULL;
-            first->next = NULL;
+            first->next = last;
 
             strcpy(first->info.word, word);
             strcpy(first->info.translation, translation);
@@ -47,8 +46,34 @@ int main() {
             continue;
         }
 
+        if (last == NULL && strcmp(word, first->info.word) > 0) {
+            last = malloc(sizeof(struct node));
+
+            last->next = NULL;
+            last->prev = first;
+
+            strcpy(last->info.word, word);
+            strcpy(last->info.translation, translation);
+            strcpy(last->info.example, example);
+            continue;
+        }
+
         struct node *tmp = malloc(sizeof(struct node));
-        if ()
+        strcpy(tmp->info.word, word);
+        strcpy(tmp->info.translation, translation);
+        strcpy(tmp->info.example, example);
+
+        if (strcmp(word, first->info.word) < 0) {
+            tmp->next = first;
+            tmp->prev = NULL;
+            first->prev = tmp;
+        }
+
+        if (strcmp(word, last->info.word) > 0) {
+            tmp->next = NULL;
+            tmp->prev = last;
+            last->prev = tmp;
+        }
 
         system("clear");
         } else break;

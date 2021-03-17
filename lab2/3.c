@@ -55,4 +55,6 @@ int main() {
     findAndDel(arr, &size);
 
     printArray(arr, size);
+
+    free(arr);
 }
