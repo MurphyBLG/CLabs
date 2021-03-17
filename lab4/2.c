@@ -13,69 +13,110 @@ struct node {
     struct node *prev, *next;
 };
 
+void memoryAllocation(struct node *elem, char *word, char *translation, char *example) {
+    elem->info.word = calloc(strlen(word + 1), sizeof(char));
+    strcpy(elem->info.word, word); 
+    elem->info.translation = calloc(strlen(translation + 1), sizeof(char));
+    strcpy(elem->info.translation, translation);
+    elem->info.example = calloc(strlen(example + 1), sizeof(char));
+    strcpy(elem->info.example, example);
+}
+
+void insert(struct node *tmp, struct node *first) {
+    struct node *itr = first;
+    while (itr != NULL)
+    {
+        if (strcmp(tmp->info.word, itr->info.word) < 0) {
+            tmp->next = itr;
+            tmp->prev = itr->prev;
+            if (itr->prev == NULL) {
+                first = tmp;
+            } else {
+                itr->prev->next = tmp;
+            }
+            itr->prev = tmp;
+            break;
+        } 
+        itr = itr->next;
+    }
+}
+
 int main() {
     system("clear");
     
     struct node *first = NULL, *last = NULL;
 
-    char word[256], translation[256], example[256], choice;
+    char word[256], translation[256], example[256], choice[25];
     for (int i = 0; i < 5; i++) {
-        printf("Do you want to enter data? (y/n)\n");
+        printf("Do you want to enter data? (yes/no)\n");
         scanf("%s", choice);
         system("clear");
 
-        if (strcmp(choice, "y") == 0) {
-        printf("Enter the word: ");    
-        scanf("%s", word);
+        if (strcmp(choice, "yes") == 0) {
+            printf("Enter the word: ");  
+            scanf("%s", word);
 
-        printf("Enter the translation: ");    
-        scanf("%s", translation);
+            printf("Enter the translation: "); 
+            scanf("%s", translation);
 
-        printf("Enter the example: ");    
-        scanf("%s", example);
+            printf("Enter the example: ");  
+            scanf("%s", example);     
 
-        if (first == NULL) {
-            first = malloc(sizeof(struct node));
+            if (first == NULL) {
+                first = (struct node*) malloc(sizeof(struct node));
 
-            first->prev = NULL;
-            first->next = last;
+                first->prev = NULL;
+                first->next = last;
 
-            strcpy(first->info.word, word);
-            strcpy(first->info.translation, translation);
-            strcpy(first->info.example, example);
-            continue;
-        }
+                memoryAllocation(first, word, translation, example);
+                system("clear");
+                continue;
+            }
 
-        if (last == NULL && strcmp(word, first->info.word) > 0) {
-            last = malloc(sizeof(struct node));
+            if (last == NULL && strcmp(word, first->info.word) > 0) {
+                last = (struct node*) malloc(sizeof(struct node));
 
-            last->next = NULL;
-            last->prev = first;
+                last->next = NULL;
+                last->prev = first;
+                first->next = last;
 
-            strcpy(last->info.word, word);
-            strcpy(last->info.translation, translation);
-            strcpy(last->info.example, example);
-            continue;
-        }
+                memoryAllocation(last, word, translation, example);
+                system("clear");
+                continue;
+            }
 
-        struct node *tmp = malloc(sizeof(struct node));
-        strcpy(tmp->info.word, word);
-        strcpy(tmp->info.translation, translation);
-        strcpy(tmp->info.example, example);
+            struct node *tmp = malloc(sizeof(struct node));
+            memoryAllocation(tmp, word, translation, example);
 
-        if (strcmp(word, first->info.word) < 0) {
-            tmp->next = first;
-            tmp->prev = NULL;
-            first->prev = tmp;
-        }
+            struct node *itr = first;
+            while (itr != NULL)
+            {
+                if (strcmp(tmp->info.word, itr->info.word) < 0) {
+                    tmp->next = itr;
+                    tmp->prev = itr->prev;
+                    if (itr->prev == NULL) {
+                        first = tmp;
+                    } else {
+                        itr->prev->next = tmp;
+                    }
+                    itr->prev = tmp;
+                    break;
+                } 
+                itr = itr->next;
+            }
 
-        if (strcmp(word, last->info.word) > 0) {
-            tmp->next = NULL;
-            tmp->prev = last;
-            last->prev = tmp;
-        }
-
-        system("clear");
+            system("clear");
         } else break;
     }
+    
+    /*printf("Enter the word which translation you want to find: ");
+    char request[256];
+    scanf("%s", request);*/
+    struct node *itr = first;
+    while (itr != NULL)
+    {
+        printf("%s\n", itr->info.word);
+        itr = itr->next;
+    }
+
 }
