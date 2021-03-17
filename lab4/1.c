@@ -34,11 +34,11 @@ int main() {
     char buffer[256];
     int size = 0;
     for (int i = 0; i < 5; i++) {
-        printf("Do you want to enter data? (yes/no)\n");
+        printf("Do you want to enter data? (y/n)\n");
         scanf("%s", buffer);
         system("clear");
 
-        if (strcmp(buffer, "yes") == 0) {
+        if (strcmp(buffer, "y") == 0) {
         size++;
         printf("Enter the word: ");    
         scanf("%s", buffer);
@@ -66,4 +66,6 @@ int main() {
     scanf("%s", request);
 
     printInfo(arr, size, request);
+    
+    free(arr);
 }
