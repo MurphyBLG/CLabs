@@ -23,7 +23,7 @@ void printInfo (struct dictionary arr[], int size, char *request) {
         }
     }
 
-    if (found == 0) printf("There is no translation forthis word\n");
+    if (found == 0) printf("There is no translation for this word\n");
 }
 
 int main() {
