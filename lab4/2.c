@@ -50,7 +50,7 @@ int main() {
     for (int i = 0; i < 5; i++) {
         printf("Do you want to enter data? (yes/no)\n");
         scanf("%s", choice);
-        system("clear");
+        //system("clear");
 
         if (strcmp(choice, "yes") == 0) {
             printf("Enter the word: ");  
@@ -69,30 +69,26 @@ int main() {
                 first->next = last;
 
                 memoryAllocation(first, word, translation, example);
-                system("clear");
+                //system("clear");
                 continue;
             }
 
             if (last == NULL) {
                 last = (struct node*) malloc(sizeof(struct node));
 
-                if (strcmp(word, first->info.word) >= 0) {
-                    last->next = NULL;
-                    last->prev = first;
-                    first->next = last;
+                last->next = NULL;
+                last->prev = first;
+                first->next = last;
 
+                if (strcmp(word, first->info.word) >= 0) {
                     memoryAllocation(last, word, translation, example);
-                    system("clear");
+                    //system("clear");
                     continue;
                 } else {
                     memoryAllocation(last, first->info.word, first->info.translation, first->info.example);
                     memoryAllocation(first, word, translation, example);
 
-                    last->prev = first;
-                    last->next = NULL;
-                    first->next = last;
-
-                    system("clear");
+                    //system("clear");
                     continue;
                 }
             }
@@ -100,59 +96,60 @@ int main() {
             struct node *tmp = malloc(sizeof(struct node));
             memoryAllocation(tmp, word, translation, example);
 
+            int inserted = 0;
+            
             struct node *itr = first;
             while (itr != NULL)
             {
                 if (strcmp(tmp->info.word, itr->info.word) < 0) {
                     tmp->next = itr;
                     tmp->prev = itr->prev;
+                   
                     if (itr->prev == NULL) {
                         first = tmp;
                     } else {
                         itr->prev->next = tmp;
                     }
                     itr->prev = tmp;
+                    inserted = 1;
                     break;
                 } 
                 itr = itr->next;
             }
-
-            itr = last;
-            while (itr != NULL)
-            {
-                if (strcmp(tmp->info.word, itr->info.word) >= 0) {
-                    tmp->prev = itr;
-                    tmp->next = itr->next;
-                    printf("%s %s %s\n", tmp->next->info.word, tmp->prev->info.word, itr->next->info.word);
-                    if (itr->next == NULL) {
-                        last = tmp;
-                    } else {
-                        itr->next->prev = tmp;
-                    }
-                    itr->next = tmp;
-                    
-                    break;
-                } 
-
-                itr = itr->prev;
-            }
-            itr = first;
-            printf("%s %s %s", itr->info.word, itr->next->info.word, itr->next->next->info);
             
+            if (inserted == 0) {
+                itr = last;
+                while (itr != NULL)
+                {
+                    if (strcmp(tmp->info.word, itr->info.word) >= 0) {
+                        tmp->prev = itr;
+                        tmp->next = itr->next;
+                        if (itr->next == NULL) {
+                            last = tmp;
+                        } else {
+                            itr->next->prev = tmp;
+                        }
+                        itr->next = tmp;
+                        break;
+                    } 
+                    itr = itr->prev;
+                }
+            }
         } else break;
     }
-    
-    /*printf("Enter the word which translation you want to find: ");
-    char request[256];
-    scanf("%s", request);*/
-    
 
+    
 }
-/* last->prev = NULL;
-                    last->next = first;
-                    first->prev = last;
-                    memoryAllocation(last, first->info.word, first->info.translation, first->info.example);
-                    struct dictionary new = first->info;
-                    first->info = last->info;
-                    last->info = new;
-                    */
+
+/* printf("TMP: %x %s %x\n", tmp->prev, tmp->info.word, tmp->next);
+printf("ITR: %x %s %x\n", itr->prev, itr->info.word, itr->next);*/
+
+
+/* printf("\n");
+struct node *f = first;
+while (f != NULL)
+{
+    printf("%x %s %x\n", f->prev, f->info.word, f->next);
+    f = f->next;
+}
+printf("\n");*/
