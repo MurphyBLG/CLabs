@@ -139,6 +139,19 @@ int main() {
     scanf("%s", request);
 
     printInfo(request, first);
+
+    struct node *f = first;
+    while (f != NULL)
+    {
+        free(f->prev);
+        free(f->info.word);
+        free(f->info.translation);
+        free(f->info.example);
+        f = f->next;
+    }
+    free(first);
+    free(last);
+    free(f);
 }
 
 /* printf("TMP: %x %s %x\n", tmp->prev, tmp->info.word, tmp->next);
