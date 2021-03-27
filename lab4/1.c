@@ -17,19 +17,19 @@ int cmp (const void  *a, const void *b) {
 }
 
 void printInfo (struct dictionary arr[], int size, char *request) {
-    int L = 0, R = size + 1;
+    int L = 0, R = size;
     while (R - L > 1)
     {
         int m = (L + R) / 2;
-        if (arr[m].word > request) R = m;
+        if (strcmp(arr[m].word, request) > 0) R = m;
         else L = m;
     }
     
-    if (arr[L].word == request) printf("Translation: %s\n", arr[L].translation);
+    if (strcmp(arr[L].word, request) == 0) printf("Translation: %s\n", arr[L].translation);
     else printf("There is no translation for this word\n");
 }
 
-int isIn (char buffer[], struct dictionary arr[], int size) {
+int inList (char buffer[], struct dictionary arr[], int size) {
     for (int j = 0; j < size; j++) {
             if (strcmp(buffer, arr[j].word) == 0) return j + 1;
         }
@@ -40,9 +40,9 @@ int isIn (char buffer[], struct dictionary arr[], int size) {
 int main() {
     system("clear");
 
-    struct dictionary arr[6];
+    struct dictionary arr[5];
 
-    char buffer[256];
+    char buffer[256], sep[2] = ", ";
     int size = 0;
     for (int i = 0; i < 5; i++) {
         printf("Do you want to enter data? (y/n)\n");
@@ -53,17 +53,15 @@ int main() {
         printf("Enter the word: ");    
         scanf("%s", buffer);
 
-        if (isIn(buffer, arr, i)) {
-            int flag = isIn(buffer, arr, i) - 1;
+        if (inList(buffer, arr, i)) {
+            int flag = inList(buffer, arr, i) - 1;
             printf("Enter the translation: ");    
             scanf("%s", buffer);
-            arr[flag].translation = realloc(arr[flag].translation, sizeof(arr[flag].translation)+2+sizeof(buffer));
             strcat(arr[flag].translation, ", ");
             strcat(arr[flag].translation, buffer);
 
             printf("Enter the example: ");    
             scanf("%s", buffer);
-            arr[flag].example = realloc(arr[flag].example, sizeof(arr[flag].example)+2);
             strcat(arr[flag].example, ", ");
             strcat(arr[flag].example, buffer);
             i--;
@@ -86,21 +84,15 @@ int main() {
         system("clear");
         } else break;
     }
-    
-    //qsort(arr, size, sizeof(struct dictionary), cmp);
 
-    printf("%d", size);
+    qsort(arr, size, sizeof(struct dictionary), cmp);
 
-    for (int i = 0; i < size; i++) {
-        printf("%s\n%s\n%s\n\n", arr[i].word, arr[i].translation, arr[i].example);
-    }
-
-    /* printf("Enter the word which translation you want to find: ");
+    printf("Enter the word which translation you want to find: ");
     char request[256];
     scanf("%s", request);
 
-    printInfo(arr, size, request);*/
-    
+    printInfo(arr, size, request);
+
     for (int i = 0; i < size; i++) {
         free(arr[i].word);
         free(arr[i].translation);

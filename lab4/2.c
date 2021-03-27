@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define system(clear) system("cls")
+
 struct dictionary
 {
     char *word, *translation, *example;
@@ -74,6 +76,23 @@ void printInfo(char request[], struct node *first) {
     printf("There is no translation for this word\n");
 }
 
+int inList (char word[], struct node *first, char translation[], char example[]) {
+    struct node *itr = first;
+    
+    while (itr != NULL) {
+        if (strcmp(word, itr->info.word) == 0) {
+            strcat(itr->info.translation, ", ");
+            strcat(itr->info.translation, translation);
+            strcat(itr->info.example, ", ");
+            strcat(itr->info.example, example);
+            return 1;
+        }
+        itr = itr->next;
+    }
+
+    return 0;
+}
+
 int main() {
     system("clear");
     
@@ -93,7 +112,12 @@ int main() {
             scanf("%s", translation);
 
             printf("Enter the example: ");  
-            scanf("%s", example);     
+            scanf("%s", example);  
+
+            if (inList(word, first, translation, example)) {
+                i--;
+                continue;
+            }   
 
             if (first == NULL) {
                 first = (struct node*) malloc(sizeof(struct node));
